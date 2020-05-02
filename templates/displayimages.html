@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="/static/css/style.css" type="text/css">
+{% block body %}
+    <div>
+        <h1> Scrapped images: </h1>
+    </div>
+    <div>
+        {% for image in scrapped_images %}
+            <img width="300" height="300" src="{{ url_for('static', filename=image) }}" alt='user_image'>
+        {% endfor %}
+    </div>
+{% endblock %}
