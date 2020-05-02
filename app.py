@@ -39,33 +39,31 @@ def show_images():
 
         else:
             print("No images are available")
+            return render_template('fail.html')
     except Exception as e:
         print("No images found, Try another keyword search")
+        return render_template('fail.html')
 
 # search images
 @app.route("/searchImages", methods=['GET', 'POST'])
 def search_images():
     if request.method == 'POST':
         search_keyword = request.form['keyword']
+
+        imagescrapperutil = srch()  ## Instantiate a object for ScrapperImage Class
+        imagescrapper = imgscrp()
+        list_images = [ file for file in os.listdir('static') if file.endswith(".png") or file.endswith(".jpg") ]
+        imagescrapper.delete_downloaded_images(list_images)  ## Delete the old images before search
+
+        image_name = search_keyword.replace(" ", "+")
+
+
+        lst_images = imagescrapperutil.downloadimages(search_keyword)
+
+        return show_images()  # redirect the control to the show images method
     else:
-        print("Unknown keyword")
-
-    imagescrapperutil = srch()  ## Instantiate a object for ScrapperImage Class
-    imagescrapper = imgscrp()
-    list_images = [ file for file in os.listdir('static') if file.endswith(".png") or file.endswith(".jpg") ]
-    imagescrapper.delete_downloaded_images(list_images)  ## Delete the old images before search
-
-    image_name = search_keyword.replace(" ", "+")
-
-    ## We need to add the header metadata
-
-    header = {
-        'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36"
-
-    }
-    lst_images = imagescrapperutil.downloadImages(search_keyword, header)
-
-    return show_images()  # redirect the control to the show images method
+        print("unknown keyword")
+        return show_images() # redirect the control to the show images method
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8088)

@@ -28,14 +28,12 @@ class imgscrp():
     def parse_image_urls(self, raw_html):
         image_url_list = []
         for a_tags in raw_html.find_all("a", {'class':'iusc'}):
-            print(a_tags)
             json_data = json.load(a_tags.m)
-            print(json_data)
             image_url_list.append(json_data['murl'])
 
         return image_url_list
 
-    def downloadImagesFromURL(imageUrlList, image_name, header):
+    def downloadImagesFromURL(self, imageUrlList, image_name, header):
         masterListOfImages = []
         count = 0
 
